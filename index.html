@@ -1,0 +1,141 @@
+<html>
+
+<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Ensures optimal rendering on mobile devices. -->
+
+<head>
+
+<script src="speechrecognition.js"></script>
+
+<script src="app.js"></script>
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+<div id="heading">
+<div id="score" >SCORE: <span id="totalCorrect">0</span></div>
+
+<div id="timer"></div>
+
+</div>
+
+	
+
+
+
+
+
+<div id="answers"></div>
+
+
+
+<div id="settings">
+<label>Number to Practice</label>
+<input type="number" id="numberToPractice"/>
+<div id="generateMultiplesButton" onclick="generateMultiples()">START</div> 
+
+</div>
+
+<div id="root">
+<div id="container">
+
+<div id="main">
+  <span id="question"></span>
+	<div id="answer" contenteditable="true">
+
+	</div>
+	<img id="speak"  onclick="speakAnswer()" src="text-to-speech.png" width="100px" height="100px"/>
+
+</div>
+<div  id="correctAnswer"></div>
+
+
+</div>
+
+</div>
+
+<div id="userResponse">
+	<div id="submitAnswer"  onclick="checkAnswer()">SUBMIT</div>
+	<div id="creatNewQuestion" onclick="newQuestion()">NEXT QUESTION</div>
+
+</div>
+
+
+</body>
+
+
+<script>
+
+hideMainElements();
+
+var answerNotSubmitted = true;
+
+document.getElementById("answer").addEventListener("keypress", function(event) {
+  console.log(event.key);
+  if (event.key === "Enter") {
+    event.preventDefault();
+    checkAnswer();
+  }
+});
+
+
+function checkAnswer(){
+  if (document.getElementById("answer").innerHTML!=""){
+	 if (answerNotSubmitted){
+	   var user_answer = parseInt(document.getElementById("answer").innerHTML);
+	   console.log(user_answer);
+	   answerCheckTyping(user_answer);
+		answerNotSubmitted = false;
+	 }
+  }else{
+      alert("PLEASE ANSWER THE QUESTION");  
+
+  }
+
+}
+
+function generateMultiples(){
+  startNewGame();
+  makeMultiples();
+  firstQuestion();
+}
+
+function speakAnswer(){
+  try{
+  
+   recognition.stop();
+  }catch(e){
+    console.log(e);
+  }
+    try{
+  
+     recognition.start();
+
+  }catch(e){
+    console.log(e);
+  }
+}
+function newQuestion(){
+  console.log(document.getElementById("answer").innerHTML);
+  if (document.getElementById("answer").innerHTML!=""){
+    checkAnswer();
+    showMainElements();
+    answerNotSubmitted = true;
+    document.getElementById("answer").focus();
+    createQuestion();
+  }else{
+    alert("PLEASE ANSWER THE QUESTION");  
+  }
+}
+
+function firstQuestion(){
+    showMainElements();
+    answerNotSubmitted = true;
+    document.getElementById("answer").focus();
+    createQuestion();
+
+}
+</script>
+
+
+</html>
